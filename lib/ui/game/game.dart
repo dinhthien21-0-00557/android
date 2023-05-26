@@ -1,8 +1,9 @@
 import 'dart:math';
-
 import 'package:cuoiky/ui/achievements/achievements.dart';
 import 'package:cuoiky/ui/play/play.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class game extends StatefulWidget {
   const game({super.key});
@@ -13,14 +14,18 @@ class game extends StatefulWidget {
 
 class _gameState extends State<game> {
   double _volumeLevel = 0.5;
-  String randomImage = 'assets/imges/tom.png';
-  String idImges = 'assets/imges/tom.png';
+  String randomImage = 'assets/imges/Hello.png';
+  String idImges = 'assets/imges/welcome.png';
+  int idbot = 0;
+  int idyou = 0;
+  int finalendPoind = 0;
+  TextEditingController endPoint = TextEditingController();
   Future<void> _showSetting(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Center(
+          title: Center(
             child: Text('Setting'),
           ),
           content: Column(
@@ -28,7 +33,7 @@ class _gameState extends State<game> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.volume_down),
+                  Icon(Icons.volume_down),
                   Expanded(
                     child: Slider(
                       value: _volumeLevel,
@@ -47,15 +52,98 @@ class _gameState extends State<game> {
                       },
                     ),
                   ),
-                  const Icon(Icons.volume_up),
+                  Icon(Icons.volume_up),
                 ],
               ),
-              ElevatedButton(
-                child: const Text('Save'),
+              Row(
+                children: [
+                  Text('End Point'),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: endPoint,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            Center(
+              child: ElevatedButton(
+                child: Text('Save'),
                 onPressed: () {
+                  int? number = int.tryParse(endPoint.text);
+                  finalendPoind = number ?? 3;
                   Navigator.of(context).pop();
                 },
               ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showWin(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(microseconds: 500000), () {
+          Navigator.of(context).pop();
+        });
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(102, 0, 0, 0),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/imges/win.png'),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showHoa(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(microseconds: 500000), () {
+          Navigator.of(context).pop();
+        });
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(115, 0, 182, 206),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/imges/hoa.png'),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showLost(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(microseconds: 500000), () {
+          Navigator.of(context).pop();
+        });
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(124, 182, 0, 0),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/imges/lost.png'),
             ],
           ),
         );
@@ -64,9 +152,9 @@ class _gameState extends State<game> {
   }
 
   List<String> imageList = [
-    'assets/imges/keo.png',
-    'assets/imges/bua.png',
-    'assets/imges/bao.png',
+    'assets/imges/keoremove.png',
+    'assets/imges/buaremove.png',
+    'assets/imges/baoremove.png',
   ];
 
   String RandomImage() {
@@ -86,6 +174,22 @@ class _gameState extends State<game> {
     setState(() {
       idImges = 'assets/imges/bao.png';
     });
+  }
+
+  void changePage() {
+    if (idbot == finalendPoind) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const play()),
+      );
+    } else if (idyou == finalendPoind) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const play()),
+      );
+    } else {}
   }
 
   @override
@@ -142,7 +246,7 @@ class _gameState extends State<game> {
               right: 0,
               top: 10.0,
               child: Text(
-                '00',
+                '0$idbot',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -161,7 +265,7 @@ class _gameState extends State<game> {
             Positioned(
               bottom: 10.0,
               child: Text(
-                '00',
+                '0$idyou',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -177,7 +281,18 @@ class _gameState extends State<game> {
                     onPressed: () {
                       onPressedButton();
                       changeImage();
-                      idImges = 'assets/imges/keo.png';
+                      idImges = 'assets/imges/keoremove.png';
+                      if (randomImage == 'assets/imges/buaremove.png') {
+                        idbot++;
+                        _showLost(context);
+                        changePage();
+                      } else if (randomImage == 'assets/imges/baoremove.png') {
+                        idyou++;
+                        _showWin(context);
+                        changePage();
+                      } else {
+                        _showHoa(context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(5),
@@ -207,7 +322,18 @@ class _gameState extends State<game> {
                     onPressed: () {
                       onPressedButton();
                       changeImage();
-                      idImges = 'assets/imges/bua.png';
+                      idImges = 'assets/imges/buaremove.png';
+                      if (randomImage == 'assets/imges/baoremove.png') {
+                        idbot++;
+                        _showLost(context);
+                        changePage();
+                      } else if (randomImage == 'assets/imges/keoremove.png') {
+                        idyou++;
+                        _showWin(context);
+                        changePage();
+                      } else {
+                        _showHoa(context);
+                      }
                     },
                     child: Image(
                       image: AssetImage('assets/imges/bua.png'),
@@ -223,7 +349,18 @@ class _gameState extends State<game> {
                     onPressed: () {
                       onPressedButton();
                       changeImage();
-                      idImges = 'assets/imges/bao.png';
+                      idImges = 'assets/imges/baoremove.png';
+                      if (randomImage == 'assets/imges/keoremove.png') {
+                        idbot++;
+                        _showLost(context);
+                        changePage();
+                      } else if (randomImage == 'assets/imges/buaremove.png') {
+                        idyou++;
+                        _showWin(context);
+                        changePage();
+                      } else {
+                        _showHoa(context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(5),
@@ -248,15 +385,15 @@ class _gameState extends State<game> {
                 children: [
                   Image(
                     image: AssetImage(randomImage),
-                    width: 150,
-                    height: 150,
+                    width: 200,
+                    height: 200,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   Image(
                     image: AssetImage(idImges),
-                    width: 150,
-                    height: 150,
+                    width: 200,
+                    height: 200,
                     fit: BoxFit.cover,
                   ),
                 ],

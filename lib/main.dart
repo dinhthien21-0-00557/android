@@ -1,6 +1,6 @@
 import 'package:cuoiky/ui/achievements/achievements.dart';
-import 'package:cuoiky/ui/character/character.dart';
 import 'package:cuoiky/ui/play/play.dart';
+import 'package:cuoiky/ui/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       create: (context) => UserProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: characterScreen(),
+        home: play(),
         routes: {
           '/achievements': (context) => achievements(),
         },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class achievements extends StatefulWidget {
   const achievements({super.key});
@@ -8,19 +7,12 @@ class achievements extends StatefulWidget {
   State<achievements> createState() => _achievementsState();
 }
 
-class UserProvider extends ChangeNotifier {
-  String? username;
 
-  void setUserName(String name) {
-    username = name;
-    notifyListeners();
-  }
-}
 
 class _achievementsState extends State<achievements> {
   @override
   Widget build(BuildContext context) {
-    String? username = Provider.of<UserProvider>(context).username;
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 198, 212, 0),
@@ -76,9 +68,7 @@ class _achievementsState extends State<achievements> {
                   ),
                 ],
               ),
-              Center(
-                child: Text('Welcome, $username!'),
-              ),
+              
             ],
           ),
         ),

@@ -1,0 +1,69 @@
+﻿--1. Hiển thị tất cả thông tin nhân viên, sắp sếp tăng dần theo Firstname, giảm dần theo Lastname. (0.5 điểm)
+SELECT *
+FROM EMPLOYEES
+ORDER BY EMPFirstName ASC,EMPLastName DESC
+--2. Hiển thị Employee ID, Full name, Date of birth, Gender và Hired date của tất cả nhân viên làm việc trong tháng 10. (0.5 điểm)
+SELECT EMP_ID, CONCAT(EMPLastName,' ', EMPFirstName) AS FULLNAME, EMPDOB, EMPGender, EMPHireDate
+FROM EMPLOYEES
+WHERE EMPHireDate LIKE'%-10-%'
+--3. Hiển thị Employee ID, Full name và Salary của nhân viên có lương lớn hơn 5500.(0.6 điểm)
+SELECT EMP_ID, CONCAT(EMPLastName, EMPFirstName) AS FULLNAME, POSSalary
+FROM EMPLOYEES, POSITIONS
+WHERE POSSalary > 5500
+--4. Hiển thị Last name và First name của nhân viên có Lastname bắt đầu bằng “Pham”. (0.7 điểm)
+SELECT EMPLastName, EMPFirstName
+FROM EMPLOYEES
+WHERE EMPLastName LIKE'Pham%'
+--5. Hiển thị Employee ID, Name, Date of birth và Address của nhân viên nữ (Gender = 0) sinh năm từ 1972 đến 1982. (0.7 điểm)
+SELECT EMP_ID, CONCAT(EMPLastName,' ', EMPFirstName) AS NAME, EMPDOB, EMPAddress
+FROM EMPLOYEES
+WHERE EMPGender = 0 AND YEAR(EMPDOB) >=1972 AND YEAR(EMPDOB) <=1982
+--6. Hiển thị tất cả nhân viên có tuổi từ 20 đến 58. (0.7 điểm)
+SELECT EMP_ID, CONCAT(EMPLastName,' ', EMPFirstName) AS NAME,YEAR(GETDATE())-YEAR(EMPDOB) AS AGE
+FROM EMPLOYEES
+WHERE YEAR(GETDATE())-YEAR(EMPDOB) >=20 AND YEAR(GETDATE())-YEAR(EMPDOB) <=58
+--7. Hiển thị Last name, First name, Position và Salary của nhân viên làm việc tại bộ phận (department) có tên “IT”. (0.7 điểm)
+SELECT EMPLastName, EMPFirstName, POSName, POSSalary
+FROM EMPLOYEES E, POSITIONS P, DEPARTMENTS D
+WHERE  E.POS_ID = P.POS_ID AND E.DEP_ID = D.DEP_ID AND DEPName = 'IT'
+--8. Hiển thị Mã bộ phận, tên bộ phận không có nhân viên nào. (0.7 điểm)
+SELECT D.DEP_ID, DEPName
+FROM DEPARTMENTS D LEFT JOIN EMPLOYEES E 
+ON D.DEP_ID = E.DEP_ID
+WHERE E.DEP_ID IS NULL
+--9. Hiển thị Mã bộ phận, tên bộ phận, số lượng nhân viên theo bộ phận đó. Điều kiện kèm theo là số lượng nhân viên phải lớn hơn hoặc bằng 3. (0.7 điểm)
+SELECT D.DEP_ID, DEPName, COUNT(EMP_ID) AS SO_LUONG_NHAN_VIEN
+FROM DEPARTMENTS D, EMPLOYEES E
+WHERE D.DEP_ID = E.DEP_ID
+GROUP BY D.DEP_ID, DEPName
+HAVING COUNT(EMP_ID)>=3
+--10. Hiển thị First name, Last name, Gender và Salary của tất cả nhân viên có lương thấp nhất. (0.7 điểm)
+SELECT TOP 1 WITH TIES EMPFirstName, EMPLastName, EMPGender, POSSalary
+FROM EMPLOYEES E, POSITIONS P
+WHERE E.POS_ID = P.POS_ID
+ORDER BY POSSalary
+--11. Hiển thị First name, Last name và Payment của nhân viên với Payment = Salary + Allowance.
+SELECT EMPFirstName , EMPLastName,sum(POSSalary + POSAllowance) as Payment
+FROM EMPLOYEES E,POSITIONS P,DEPARTMENTS D
+where E.POS_ID = P.POS_ID and E.DEP_ID = D.DEP_ID
+GROUP BY EMPFirstName , EMPLastName
+--12. Hiển thị Employee ID, Full name, Gender, Date of birth, Hired date, Position, Department, Payment của mỗi nhân viên, sắp xếp kết quả tăng dần theo Demartment. (0.7 điểm)
+SELECT E.EMP_ID, CONCAT(EMPLastName,' ', EMPFirstName) AS FULLNAME, EMPDOB, EMPGender, EMPHireDate,P.POS_ID, D.DEP_ID
+FROM EMPLOYEES E, POSITIONS P, DEPARTMENTS D
+WHERE E.POS_ID = P.POS_ID AND E.DEP_ID = D.DEP_ID 
+ORDER BY D.DEP_ID ASC
+--13. Hiển thị số lượng nhân viên theo mỗi department. Định dạng hiển thị như hình sau: 
+SELECT D.DEPName AS Deparment,COUNT(DEPName) AS TongSoNhanVien
+FROM EMPLOYEES E,DEPARTMENTS D
+WHERE E.DEP_ID = D.DEP_ID
+GROUP BY D.DEPName
+--14. Hiển thị Mã bộ phận, tên bộ phận có số lượng nhân viên nhiều nhất (hiển thị thêm số lượng nhân viên).
+SELECT TOP 1 D.DEP_ID ,D.DEPName, COUNT(DEPName) AS SoNhanVien
+FROM DEPARTMENTS D,EMPLOYEES E
+WHERE D.DEP_ID = E.DEP_ID
+GROUP BY D.DEP_ID,D.DEPName
+--15. Hiển thị tổng tiền phải trả cho từng bộ phận. Định dạng kết quả hiển thị như sau: 
+SELECT D.DEP_ID,((COUNT(P.POSName)*POSSalary)+POSAllowance) AS TongTien
+FROM  EMPLOYEES E,POSITIONS P , DEPARTMENTS D
+WHERE E.DEP_ID = D.DEP_ID AND P.POS_ID = E.POS_ID
+GROUP BY D.DEP_ID,P.POSName

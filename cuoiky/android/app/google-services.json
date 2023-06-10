@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "282406862578",
+    "project_id": "keobuabao-2c641",
+    "storage_bucket": "keobuabao-2c641.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282406862578:android:dec2ba80c0e61b7b355a6b",
+        "android_client_info": {
+          "package_name": "com.example.cuoiky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282406862578-1hjits7967ql59de64lmq9fh3qtvmir8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiBWtO8JuoLJ5e6RhtlOW42FrlKemCp1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282406862578-1hjits7967ql59de64lmq9fh3qtvmir8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282406862578-uoa71sg0ghsp162utvaqmltubj95jb8j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cuoiky"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

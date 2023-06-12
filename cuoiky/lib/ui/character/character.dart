@@ -3,14 +3,14 @@ import 'package:cuoiky/ui/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class character extends StatefulWidget {
-  const character({super.key});
+class Character extends StatefulWidget {
+  const Character({super.key});
 
   @override
-  State<character> createState() => _characterState();
+  State<Character> createState() => _CharacterState();
 }
 
-class _characterState extends State<character> {
+class _CharacterState extends State<Character> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class _characterState extends State<character> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 200,
             ),
             ElevatedButton(
@@ -41,16 +41,16 @@ class _characterState extends State<character> {
                     .setCharacterData(characterData);
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Welcome()),
+                  MaterialPageRoute(builder: (context) => const Welcome()),
                   (Route<dynamic> route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 5.0,
                   vertical: 5.0,
                 ),
-                backgroundColor: Color.fromARGB(74, 108, 108, 108),
+                backgroundColor: const Color.fromARGB(74, 108, 108, 108),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -63,14 +63,14 @@ class _characterState extends State<character> {
                     width: 190,
                     height: 160,
                   ),
-                  Text(
+                  const Text(
                     'Character 1',
                     style: TextStyle(fontSize: 30.0),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 CharacterData characterData = CharacterData(
@@ -80,16 +80,16 @@ class _characterState extends State<character> {
                     .setCharacterData(characterData);
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Welcome()),
+                  MaterialPageRoute(builder: (context) => const Welcome()),
                   (Route<dynamic> route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 5.0,
                   vertical: 5.0,
                 ),
-                backgroundColor: Color.fromARGB(74, 108, 108, 108),
+                backgroundColor: const Color.fromARGB(74, 108, 108, 108),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -102,14 +102,14 @@ class _characterState extends State<character> {
                     width: 190,
                     height: 160,
                   ),
-                  Text(
+                  const Text(
                     'Character 2',
                     style: TextStyle(fontSize: 30.0),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 CharacterData characterData = CharacterData(
@@ -119,16 +119,16 @@ class _characterState extends State<character> {
                     .setCharacterData(characterData);
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Welcome()),
+                  MaterialPageRoute(builder: (context) => const Welcome()),
                   (Route<dynamic> route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 5.0,
                   vertical: 5.0,
                 ),
-                backgroundColor: Color.fromARGB(74, 108, 108, 108),
+                backgroundColor: const Color.fromARGB(74, 108, 108, 108),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -141,7 +141,7 @@ class _characterState extends State<character> {
                     width: 190,
                     height: 160,
                   ),
-                  Text(
+                  const Text(
                     'Character 3',
                     style: TextStyle(fontSize: 30.0),
                   ),

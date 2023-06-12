@@ -1,14 +1,14 @@
 import 'package:cuoiky/ui/login/login.dart';
 import 'package:flutter/material.dart';
 
-class play extends StatefulWidget {
-  const play({super.key});
+class Play extends StatefulWidget {
+  const Play({super.key});
 
   @override
-  State<play> createState() => _playState();
+  State<Play> createState() => _PlayState();
 }
 
-class _playState extends State<play> {
+class _PlayState extends State<Play> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +37,7 @@ class _playState extends State<play> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => login()),
+                  MaterialPageRoute(builder: (context) => const Login()),
                 );
               },
               icon: const Icon(Icons.play_circle),

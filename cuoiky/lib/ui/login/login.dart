@@ -1,48 +1,18 @@
+import 'package:cuoiky/main.dart';
 import 'package:cuoiky/ui/character/character.dart';
-import 'package:cuoiky/ui/welcome/welcome.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class login extends StatefulWidget {
-  const login({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<login> createState() => _loginState();
+  State<Login> createState() => _LoginState();
 }
 
-class _loginState extends State<login> {
+class _LoginState extends State<Login> {
   final TextEditingController usernameController = TextEditingController();
-  void postUsername(String username) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    firestore.collection('name').add({
-      'username': username,
-    }).then((value) {
-      print("Đã gửi thành công tên người dùng: $username");
-    }).catchError((error) {
-      print("Đã xảy ra lỗi khi gửi tên người dùng: $error");
-    });
-
-    // firestore.collection('name').get().then((snapshot) {
-    //   List<DocumentSnapshot> documents = snapshot.docs;
-
-    //   // Sắp xếp lại danh sách tài liệu theo thứ tự mới
-    //   documents.sort((a, b) {
-    //     Timestamp aTimestamp = a.get('timestamp');
-    //     Timestamp bTimestamp = b.get('timestamp');
-    //     return bTimestamp.compareTo(aTimestamp);
-    //   });
-
-    //   // Cập nhật lại thứ tự của tài liệu
-    //   for (int i = 0; i < documents.length; i++) {
-    //     DocumentReference documentReference = documents[i].reference;
-    //     documentReference.update({'timestamp': i});
-    //   }
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +70,18 @@ class _loginState extends State<login> {
               child: ElevatedButton(
                 onPressed: () {
                   String username = usernameController.text;
-                  Provider.of<UserProvider>(context, listen: false)
-                      .setUserName(username);
-                  postUsername(username);
+                  NameData nameData = NameData(name: username);
+                  Provider.of<GameNameData>(context, listen: false)
+                      .setNameData(nameData);
+                  // postUsername(username);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => character()),
+                    MaterialPageRoute(builder: (context) => const Character()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 0, 54, 98),
-                  onPrimary: Colors.white,
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(255, 0, 54, 98),
                 ),
                 child: const Text(
                   'Play',

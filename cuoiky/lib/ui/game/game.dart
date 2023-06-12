@@ -6,27 +6,16 @@ import 'package:cuoiky/ui/play/play.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class game extends StatefulWidget {
-  const game({Key? key}) : super(key: key);
+class Game extends StatefulWidget {
+  const Game({Key? key}) : super(key: key);
 
   @override
-  State<game> createState() => _gameState();
+  State<Game> createState() => _GameState();
 }
 
-class UserProvider extends ChangeNotifier {
-  String? username;
-
-  void setUserName(String name) {
-    username = name;
-    notifyListeners();
-  }
-}
-
-class _gameState extends State<game> {
+class _GameState extends State<Game> {
   double _volumeLevel = 0.5;
   String randomImage = 'assets/imges/Hello.png';
   String idImges = 'assets/imges/welcome.png';
@@ -34,14 +23,14 @@ class _gameState extends State<game> {
   int idyou = 0;
   int finalendPoind = 3;
   TextEditingController endPoint = TextEditingController();
-
+  String name = '';
   Future<void> _showSetting(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 0, 255, 212),
-          title: Center(
+          backgroundColor: const Color.fromARGB(255, 0, 255, 212),
+          title: const Center(
             child: Text('Setting'),
           ),
           content: Column(
@@ -49,7 +38,7 @@ class _gameState extends State<game> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.volume_down),
+                  const Icon(Icons.volume_down),
                   Expanded(
                     child: Slider(
                       value: _volumeLevel,
@@ -68,13 +57,13 @@ class _gameState extends State<game> {
                       },
                     ),
                   ),
-                  Icon(Icons.volume_up),
+                  const Icon(Icons.volume_up),
                 ],
               ),
               Row(
                 children: [
-                  Text('End Point'),
-                  SizedBox(
+                  const Text('End Point'),
+                  const SizedBox(
                     width: 15,
                   ),
                   Expanded(
@@ -84,7 +73,7 @@ class _gameState extends State<game> {
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'\d+')),
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           fillColor: Color.fromARGB(
                               155, 95, 173, 236), // Màu nền của TextField
                           filled: true,
@@ -97,7 +86,7 @@ class _gameState extends State<game> {
           actions: <Widget>[
             Center(
               child: ElevatedButton(
-                child: Text('Save'),
+                child: const Text('Save'),
                 onPressed: () {
                   int? number = int.tryParse(endPoint.text);
                   finalendPoind = number ?? 3;
@@ -116,11 +105,11 @@ class _gameState extends State<game> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        Future.delayed(Duration(microseconds: 500000), () {
+        Future.delayed(const Duration(microseconds: 500000), () {
           Navigator.of(context).pop();
         });
         return AlertDialog(
-          backgroundColor: Color.fromARGB(102, 0, 0, 0),
+          backgroundColor: const Color.fromARGB(102, 0, 0, 0),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -137,11 +126,11 @@ class _gameState extends State<game> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        Future.delayed(Duration(microseconds: 500000), () {
+        Future.delayed(const Duration(microseconds: 500000), () {
           Navigator.of(context).pop();
         });
         return AlertDialog(
-          backgroundColor: Color.fromARGB(115, 0, 182, 206),
+          backgroundColor: const Color.fromARGB(115, 0, 182, 206),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -158,11 +147,11 @@ class _gameState extends State<game> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        Future.delayed(Duration(microseconds: 500000), () {
+        Future.delayed(const Duration(microseconds: 500000), () {
           Navigator.of(context).pop();
         });
         return AlertDialog(
-          backgroundColor: Color.fromARGB(124, 182, 0, 0),
+          backgroundColor: const Color.fromARGB(124, 182, 0, 0),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -180,6 +169,7 @@ class _gameState extends State<game> {
     'assets/imges/baoremove.png',
   ];
 
+  // ignore: non_constant_identifier_names
   String RandomImage() {
     final random = Random();
     final randomIndex = random.nextInt(imageList.length);
@@ -199,26 +189,6 @@ class _gameState extends State<game> {
     });
   }
 
-  void changePage() {
-    if (idbot == finalendPoind) {
-      Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => const End()),
-        (Route<dynamic> route) => false,
-      );
-      postID(idbot, idyou);
-    } else if (idyou == finalendPoind) {
-      Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => const End()),
-        (Route<dynamic> route) => false,
-      );
-      postID(idbot, idyou);
-    } else {}
-  }
-
   void idData() {
     setState(() {
       IDData idData = IDData(
@@ -229,23 +199,47 @@ class _gameState extends State<game> {
     });
   }
 
-  void postID(int idbot, int idyou) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+  void changePage() {
+    if (idbot == finalendPoind) {
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const End()),
+        (Route<dynamic> route) => false,
+      );
+      postID(name, idbot.toString(), idyou.toString());
+    } else if (idyou == finalendPoind) {
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const End()),
+        (Route<dynamic> route) => false,
+      );
+      postID(name, idbot.toString(), idyou.toString());
+    } else {}
+  }
 
-    firestore.collection('game').add({
-      'idbot': idbot,
-      'idyou': idyou,
-    }).then((value) {
-      print("Đã gửi thành công tên người dùng: $idbot $idyou");
-    }).catchError((error) {
-      print("Đã xảy ra lỗi khi gửi tên người dùng: $error");
-    });
+  void postID(String username, String idbot, String idyou) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    Timestamp currentTime = Timestamp.now();
+    firestore
+        .collection('game')
+        .add({
+          'username': username,
+          'idbot': idbot,
+          'idyou': idyou,
+          'time': currentTime,
+        })
+        .then((value) {})
+        .catchError((error) {});
   }
 
   @override
   Widget build(BuildContext context) {
     CharacterData characterData =
         Provider.of<GameData>(context).selectedCharacter;
+    NameData nameData = Provider.of<GameNameData>(context).selectedName;
+    name = nameData.name;
 
     return Scaffold(
       appBar: AppBar(
@@ -256,14 +250,14 @@ class _gameState extends State<game> {
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const play()),
+              MaterialPageRoute(builder: (context) => const Play()),
               (Route<dynamic> route) => route.isFirst,
             );
           },
         ),
         actions: [
           IconButton(
-            color: Color.fromARGB(255, 0, 255, 213),
+            color: const Color.fromARGB(255, 0, 255, 213),
             onPressed: () {
               _showSetting(context);
             },
@@ -274,18 +268,18 @@ class _gameState extends State<game> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => const game()),
+                    builder: (BuildContext context) => const Game()),
                 (Route<dynamic> route) => route.isFirst,
               );
             },
             icon: const Icon(Icons.restart_alt),
           ),
           IconButton(
-            color: Color.fromARGB(255, 212, 255, 0),
+            color: const Color.fromARGB(255, 212, 255, 0),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => achievements()),
+                MaterialPageRoute(builder: (context) => const Achievements()),
               );
             },
             icon: const Icon(Icons.verified),
@@ -294,7 +288,7 @@ class _gameState extends State<game> {
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
-        color: Color.fromARGB(255, 0, 37, 67),
+        color: const Color.fromARGB(255, 0, 37, 67),
         width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -304,7 +298,7 @@ class _gameState extends State<game> {
               top: 10.0,
               child: Text(
                 '0$idbot',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                 ),
@@ -314,7 +308,7 @@ class _gameState extends State<game> {
               top: 10.0,
               left: 120.0,
               child: Image(
-                image: AssetImage('${characterData.character}'),
+                image: AssetImage(characterData.character),
                 width: 150,
                 height: 150,
               ),
@@ -323,7 +317,7 @@ class _gameState extends State<game> {
               bottom: 10.0,
               child: Text(
                 '0$idyou',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                 ),
@@ -355,8 +349,8 @@ class _gameState extends State<game> {
                       idData();
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(5),
-                      backgroundColor: Color.fromARGB(61, 158, 194, 224),
+                      padding: const EdgeInsets.all(5),
+                      backgroundColor: const Color.fromARGB(61, 158, 194, 224),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -368,13 +362,13 @@ class _gameState extends State<game> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(5),
-                      backgroundColor: Color.fromARGB(61, 158, 194, 224),
+                      padding: const EdgeInsets.all(5),
+                      backgroundColor: const Color.fromARGB(61, 158, 194, 224),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -429,8 +423,8 @@ class _gameState extends State<game> {
                       idData();
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(5),
-                      backgroundColor: Color.fromARGB(61, 158, 194, 224),
+                      padding: const EdgeInsets.all(5),
+                      backgroundColor: const Color.fromARGB(61, 158, 194, 224),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

@@ -31,7 +31,7 @@ class _EndState extends State<End> {
           ),
           child: Stack(
             children: [
-              Positioned(
+              const Positioned(
                 right: 0,
                 top: 100,
                 child: Image(
@@ -48,7 +48,7 @@ class _EndState extends State<End> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => play()),
+                      MaterialPageRoute(builder: (context) => const Play()),
                       (Route<dynamic> route) => false,
                     );
                   },
@@ -60,11 +60,12 @@ class _EndState extends State<End> {
                 right: 0,
                 top: 10,
                 child: IconButton(
-                  color: Color.fromARGB(255, 212, 255, 0),
+                  color: const Color.fromARGB(255, 212, 255, 0),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => achievements()),
+                      MaterialPageRoute(
+                          builder: (context) => const Achievements()),
                     );
                   },
                   icon: const Icon(Icons.verified),
@@ -76,14 +77,14 @@ class _EndState extends State<End> {
                 bottom: 10,
                 child: Column(
                   children: [
-                    Image(
+                    const Image(
                       image: AssetImage('assets/imges/win.png'),
                       width: 100,
                       height: 100,
                     ),
                     Text(
-                      '${idData.idYou}',
-                      style: TextStyle(
+                      idData.idYou,
+                      style: const TextStyle(
                           fontSize: 40,
                           color: Color.fromARGB(255, 255, 255, 0)),
                     )
@@ -95,14 +96,14 @@ class _EndState extends State<End> {
                 bottom: 10,
                 child: Column(
                   children: [
-                    Image(
+                    const Image(
                       image: AssetImage('assets/imges/lost.png'),
                       width: 100,
                       height: 100,
                     ),
                     Text(
-                      '${idData.idBot}',
-                      style: TextStyle(
+                      idData.idBot,
+                      style: const TextStyle(
                           fontSize: 40, color: Color.fromARGB(255, 255, 0, 0)),
                     ),
                   ],

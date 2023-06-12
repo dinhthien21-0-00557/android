@@ -95,6 +95,7 @@ flutter:
     - assets/imges/nu.png
     - assets/imges/be.png
     - assets/imges/nam.png
+    - assets/imges/br_achievements.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

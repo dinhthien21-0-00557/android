@@ -1,6 +1,4 @@
-import 'package:cuoiky/ui/character/character.dart';
 import 'package:cuoiky/ui/play/play.dart';
-import 'package:cuoiky/ui/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +8,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+      create: (context) => GameNameData(),
     ),
     ChangeNotifierProvider(
       create: (context) => GameData(),
@@ -18,20 +16,21 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) => GameIDData(),
     ),
-  ], child: MyApp()));
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: play(),
+      home: Play(),
     );
   }
 }
 
+//GameData
 class GameData extends ChangeNotifier {
   CharacterData _selectedCharacter = CharacterData(
     character: '',
@@ -51,6 +50,7 @@ class CharacterData {
   CharacterData({required this.character});
 }
 
+//GameIDData
 class GameIDData extends ChangeNotifier {
   IDData _selectedID = IDData(
     idBot: '',
@@ -63,6 +63,8 @@ class GameIDData extends ChangeNotifier {
     _selectedID = idData;
     notifyListeners();
   }
+
+  void setNameData(NameData nameData) {}
 }
 
 class IDData {
@@ -70,4 +72,24 @@ class IDData {
   final String idYou;
 
   IDData({required this.idBot, required this.idYou});
+}
+
+//NameData
+class GameNameData extends ChangeNotifier {
+  NameData _selectedName = NameData(
+    name: '',
+  );
+
+  NameData get selectedName => _selectedName;
+
+  void setNameData(NameData nameData) {
+    _selectedName = nameData;
+    notifyListeners();
+  }
+}
+
+class NameData {
+  final String name;
+
+  NameData({required this.name});
 }

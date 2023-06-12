@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cuoiky/main.dart';
 import 'package:cuoiky/ui/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,31 +12,22 @@ class Welcome extends StatefulWidget {
   State<Welcome> createState() => _WelcomeState();
 }
 
-class UserProvider extends ChangeNotifier {
-  String? username;
-
-  void setUserName(String name) {
-    username = name;
-    notifyListeners();
-  }
-}
-
 class _WelcomeState extends State<Welcome> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => game()),
+        MaterialPageRoute(builder: (context) => const Game()),
         (Route<dynamic> route) => false,
       );
     });
   }
 
+  @override
   Widget build(BuildContext context) {
-    String? username = Provider.of<UserProvider>(context).username;
-
+    NameData nameData = Provider.of<GameNameData>(context).selectedName;
     return Scaffold(
       appBar: null,
       body: Center(
@@ -55,8 +47,8 @@ class _WelcomeState extends State<Welcome> {
             children: [
               Text(
                 """ Welcome 
-   $username""",
-                style: TextStyle(
+   ${nameData.name}""",
+                style: const TextStyle(
                   fontSize: 70,
                   fontStyle: FontStyle.italic,
                   color: Color.fromARGB(255, 0, 255, 204),
